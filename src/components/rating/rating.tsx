@@ -1,3 +1,4 @@
+// https://9ba9375b.qwik-docs.pages.dev/qwikcity/action/
 import { promises as fs } from "fs";
 import { action$, Form } from "@builder.io/qwik-city";
 import { component$ } from "@builder.io/qwik";
@@ -5,15 +6,21 @@ import { component$ } from "@builder.io/qwik";
 export const useSetRating = action$(async (form) => {
   console.log("received form", form);
 
-  await fs.writeFile(
-    "db.txt",
-    JSON.stringify({ rating: form.rating }, null, 2),
-    "utf8"
-  );
+  try {
+    await fs.writeFile(
+      "db.txt",
+      JSON.stringify({ rating: form.rating }, null, 2),
+      "utf8"
+    );
 
-  return {
-    success: true,
-  };
+    return {
+      success: true,
+    };
+  } catch (error) {
+    return {
+      success: false,
+    };
+  }
 });
 
 export default component$(({ initialRating }: { initialRating: string }) => {
